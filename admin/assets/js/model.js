@@ -33,6 +33,7 @@ function Eguna(data, izena, deialdiak) {
             dldk[i].eguna = self;
         }
     }
+    self.jaia = null;
     // transient
     self.editagarria = ko.observable(false);
     self.hasieraOrdua = ko.observable(8);
@@ -72,6 +73,14 @@ function Eguna(data, izena, deialdiak) {
     self.hasieraOrdua.subscribe(function (ordua) {
         self.sort();
     });
+    
+//    self.data.subscribe(function (data) {
+//        console.log("self.jaia");
+//        console.log(self.jaia);
+//        if (self.jaia !== null) {
+//            self.jaia.sort();
+//        }
+//    });
 }
 
 // Class to represent an event in a festival day
@@ -210,6 +219,22 @@ function Jaia() {
             }
         }
         return matchingItems;
+    };
+    
+    self.sort = function () {
+        self.egunak.sort(function (left, right) {
+            if (left.data() === right.data()) {
+                console.log(0);
+                return 0;
+            }
+            if (left.data() > right.data()) {
+                console.log-(1);
+                return 1;
+            } else {
+                console.log(-1);
+                return -1;
+            }
+        });
     };
 }
 

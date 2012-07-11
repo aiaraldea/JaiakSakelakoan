@@ -57,7 +57,7 @@ function App() {
         self.egunaGehitu(false);
     };
     
-    self.ezarriEditatzekoEguna = function (eguna) {
+    self.ezarriEditatzekoEguna = function (eguna, event) {
         if (eguna !== null) {
             self.editatzekoEgunaId(eguna.id);
             self.hautatutakoEguna(null);
@@ -68,6 +68,9 @@ function App() {
         self.editatzekoJaia(false);
         self.deialdiaGehitu(false);
         self.egunaGehitu(false);
+        if (event!=null) {
+            $(event.target).closest('td').find('.datepicker').datepicker({language: 'eu', autoclose: true, weekStart: 1});
+        }
     };
 
     self.berrezarriEditatzekoak = function () {
@@ -76,18 +79,26 @@ function App() {
         self.editatzekoJaia(false);
         self.deialdiaGehitu(false);
         self.egunaGehitu(false);
+        self.jaia().sort();
     };
 
     // Edukiak gehitzeko
     self.egunaGehitu = ko.observable(false);
     self.deialdiaGehitu = ko.observable(false);
     
-    self.toggleEgunaGehitu = function () {
+    self.toggleEgunaGehitu = function (data, event) {
         self.editatzekoEgunaId(null);
         self.editatzekoDeialdiaId(null);
         self.editatzekoJaia(false);
         self.deialdiaGehitu(false);
         self.egunaGehitu(!self.egunaGehitu());
+        if (self.egunaGehitu()) {
+        console.log(event);
+        console.log($(event.target));
+        console.log($(event.target).closest('div'));
+        console.log($(event.target).closest('div').find('.datepicker'));
+            $(event.target).closest('div').find('.datepicker').datepicker({language: 'eu', autoclose: true, weekStart: 1});
+        }
     };
     
     self.toggleDeialdiaGehitu = function () {
@@ -103,7 +114,8 @@ function App() {
     self.gehituEguna = function () {
         self.jaia().egunak.push(self.egunBerria());
         self.egunBerria(new Eguna());
-//        self.egunaGehitu(false);
+        //self.egunaGehitu(false);
+        self.jaia().sort();
     };
     
     self.deialdiBerria = ko.observable(new Deialdi());
@@ -156,6 +168,12 @@ $(function () {
     });
     $('#inportatzeModal').modal().modal('hide');
     $('#aurreikusiModal').modal().modal('hide');
+    $('#aurreikusiModal').on('show', function() {
+        $('#aurreikusiModal iframe').attr('src', '../app/index.html');
+    });
+    $('#aurreikusiModal').on('hide', function() {
+        $('#aurreikusiModal iframe').attr('src', '');
+    });
+    
     $('.dropdown-toggle').dropdown();
-    $('.datepicker').datepicker({language: 'eu', autoclose: true, weekStart: 1})
 });
