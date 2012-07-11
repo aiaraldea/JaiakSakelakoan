@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns		= "http://www.w3.org/ns/widgets"
+	xmlns:gap	= "http://phonegap.com/ns/1.0"
+	id		= "com.aiaraldea.jaiak.urduna"
+	version 	= "1.0.3"
+        versionCode     = "3">
+
+    <name>Urduñako jaiak</name>
+
+    <description>
+            Urduñako jaien egitaraua zure sakelako telefonoan
+    </description>
+
+    <author href="http://www.aiaraldea.com"
+		email="inakiibarrola@yahoo.es">
+		Iñaki Ibarrola
+    </author>
+
+    <gap:platforms>
+        <gap:platform name="android" minVersion="2.1" />
+        <gap:platform name="webos" />
+        <gap:platform name="symbian.wrt" />
+        <gap:platform name="blackberry" project="widgets"/>
+    </gap:platforms>
+
+    <icon src="assets/icon.png" gap:role="default" />
+    <gap:splash src="assets/splash.jpg" />
+
+<!--	<feature name="http://api.phonegap.com/1.0/geolocation"/>-->
+    <feature name="http://api.phonegap.com/1.0/network"/>
+
+	<!-- sample preference specification -->
+	<!-- <preference name="autorotate" value="false" readonly="true"/> -->
+</widget>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Urduñako jaiak 2012</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta name="HandheldFriendly" content="true"/>
+        <link rel="stylesheet" href="assets/jquery.mobile-1.1.0.min.css" />
+        <script src="assets/js/jquery-1.7.2.min.js"></script>
+        <script src="assets/js/jqm.page.params.js" type="text/javascript"></script>
+        <script src="assets/jquery.mobile-1.1.0.min.js"></script>
+        <script type='text/javascript' src='assets/js/knockout-2.0.0.js'></script>
+        <script type='text/javascript' src='assets/js/knockout.mapping-latest.js'></script>
+        <script type='text/javascript' src='assets/js/data.js'></script>
+        <script type='text/javascript' src='assets/js/model.js'></script>
+        <script type='text/javascript' src='assets/js/app.js'></script>
+        <style>
+            .ui-footer .ui-title {
+/*                margin: .6em auto .8em;*/
+            }
+        </style>
+    </head>
+    <body>
+        <div data-role="page" id="jaia">
+            <div data-role="header">
+                <h1 data-bind="text: izena">izena</h1>
+            </div><!-- /header -->
+
+            <div data-role="content">
+                <ul data-role="listview" data-inset="true" data-theme="c" data-bind="mlist: $root.egunak">
+                    <li><a data-bind="text: dataString, attr: { href: url }"></a></li>
+                </ul>
+                <div data-role="collapsible" data-content-theme="c">
+                    <h3>Nire deialdiak</h3>
+                    <ul id="nd-ul" data-role="listview" data-inset="true" data-theme="c" data-bind="mlist: $root.hautatutakoDeialdiak">
+                        <li>
+                            <a data-bind="attr: { href: url }">
+                                <h3><span data-bind="text: eguna.dataString"></span>: <span data-bind="text: ordua"></span></h3>
+                                <p><span data-bind="html: izenburua"></span></p></a>
+                        </li>
+                    </ul>
+
+                </div>
+                <a href="#license" data-role="button">Kredituak</a>
+            </div>
+
+            <div data-role="footer">
+                <h4>&copy; Aiaraldea Komunikazio Leihoa</h4>
+            </div><!-- /header -->
+        </div>
+
+        <div data-role="page" id="eguna" data-add-back-btn="true" data-back-btn-text="Atzera" data-bind="pageWith: hautatutakoEguna" data-dom-cache="true">
+            <div data-role="header">
+                <h1><span data-bind="text: dataString"> </span>: <span data-bind="text: izena"></span></h1>
+            </div> <!-- /header -->
+            <div data-role="content">
+                <ul id="egunalist" data-role="listview" data-inset="true" data-theme="c" data-bind="mlist: deialdiak">
+                    <li>
+                        <a data-bind="attr: { href: url }">
+                            <span class="ui-li-heading" data-bind="text: ordua"></span>
+                            <p data-bind="html: izenburua" ></p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div data-role="footer">
+                <h4>&copy; Aiaraldea Komunikazio Leihoa</h4>
+            </div>
+        </div>
+
+        <div data-role="page" id="deialdia" data-add-back-btn="true" data-back-btn-text="Atzera" data-bind="pageWith: hautatutakoDeialdia" data-dom-cache="true">
+            <div data-role="header">
+                <h1><span data-bind="text: eguna.dataString"></span>: <span data-bind="text: ordua"></span></h1>
+            </div><!--  /header  -->
+            <div data-role="content">
+                <h4 data-bind="text: eguna.dataString"></h4>
+                <h2 data-bind="text: ordua"></h2>
+                <p data-bind="html: izenburua"></p>
+                <p data-bind="html: xehetasunak"></p>
+                <a id="jqbh" data-role="button" data-bind="click: toggle"><span  data-bind="text: hautatuaMezua"></span></a>
+            </div><!--  /content  -->
+            <div data-role="footer">
+                <h4>&copy; Aiaraldea Komunikazio Leihoa</h4>
+            </div><!--  /header --> 
+        </div> <!-- /page -->
+
+
+        <div data-role="page" id="license" data-add-back-btn="true" data-back-btn-text="Atzera">
+            <div data-role="header">
+                <h1>Kredituak</h1>
+            </div><!-- /header -->
+            <div data-role="content">
+                <dl>
+                    <dt>Azalaren irudia eta ikonoa:</dt>
+                    <dd data-bind="text: kartelarenEgilea">Yolanda Remire de Ganuza</dd>
+                    <dt>Programazioa:</dt>
+                    <dd>Aiaraldea komunikazio leihoa</dd>
+                </dl>
+                <p>
+                </p></div><!-- /content -->
+            <div data-role="footer">
+                <h4>&copy; Aiaraldea Komunikazio Leihoa</h4>
+            </div><!-- /footer -->
+        </div><!-- /page -->
+    </body>
+</html>
