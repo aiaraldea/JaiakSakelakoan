@@ -77,6 +77,9 @@ function App() {
         self.deialdiaGehitu(false);
         self.egunaGehitu(false);
         self.jaia().sort();
+        if(self.hautatutakoEguna() !== null) {
+            self.hautatutakoEguna().sort();
+        }
     };
 
     // Edukiak gehitzeko

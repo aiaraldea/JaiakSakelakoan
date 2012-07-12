@@ -120,12 +120,6 @@ function Deialdi(id) {
     self.toggleEditagarria = function () {  
         self.editagarria(!self.editagarria());
     };
-
-    self.ordua.subscribe(function (ordua) {
-        if (self.eguna !== null) {
-            self.eguna.sort();
-        }
-    });
 }
 
 // Overall viewmodel for this screen, along with initial state
