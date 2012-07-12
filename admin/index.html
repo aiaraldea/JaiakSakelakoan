@@ -115,6 +115,7 @@
 
                                     </div>
                                     <div data-bind="visible: $root.egunaEditagarriaDa(id)">
+                                        <h6 data-bind="text: dataString"></h6>
                                         <form class="well">
                                             <label>Data</label>
                                             <div class="input-append date datepicker" data-bind="datePicker: data">
@@ -175,6 +176,7 @@
                                         <p data-bind="html: xehetasunak" ></p>
                                     </div>
                                     <div data-bind="visible: ($root.deialdiaEditagarriaDa(id))">
+                                        <h6><span data-bind="text: ordua"></span> - <span data-bind="text: izenburua"></span></h6>
                                         <form class="well">
                                             <label>Id</label><span data-bind="text: id"></span>
                                             <label>Ordua</label>
