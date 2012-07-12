@@ -68,9 +68,6 @@ function App() {
         self.editatzekoJaia(false);
         self.deialdiaGehitu(false);
         self.egunaGehitu(false);
-        if (event!=null) {
-            $(event.target).closest('td').find('.datepicker').datepicker({language: 'eu', autoclose: true, weekStart: 1});
-        }
     };
 
     self.berrezarriEditatzekoak = function () {
@@ -92,13 +89,6 @@ function App() {
         self.editatzekoJaia(false);
         self.deialdiaGehitu(false);
         self.egunaGehitu(!self.egunaGehitu());
-        if (self.egunaGehitu()) {
-        console.log(event);
-        console.log($(event.target));
-        console.log($(event.target).closest('div'));
-        console.log($(event.target).closest('div').find('.datepicker'));
-            $(event.target).closest('div').find('.datepicker').datepicker({language: 'eu', autoclose: true, weekStart: 1});
-        }
     };
     
     self.toggleDeialdiaGehitu = function () {
@@ -154,6 +144,22 @@ App.init = function () {
     app.egunBerria = ko.observable(app.jaia().sortuEguna());
     window.viewModel = app;
 };
+
+ko.bindingHandlers.datePicker = {
+    init: function(element, valueAccessor, allBindingsAccessor, viewModel) {
+        var value = valueAccessor();
+        $(element).datepicker({language: 'eu', autoclose: true, weekStart: 1, format: 'yyyy-mm-dd'});
+        $(element).find('input').change(function() {
+            value($(element).find('input').val());
+        });
+    },
+    update: function(element, valueAccessor, allBindingsAccessor, viewModel) {
+        var value = valueAccessor();
+        var data = ko.utils.unwrapObservable(value);
+        $(element).find('input').val(data);
+    }
+};
+
 
 App.init();
 

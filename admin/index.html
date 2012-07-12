@@ -13,7 +13,6 @@
         <script type='text/javascript' src="assets/js/bootstrap-datepicker.js"></script>
         <script type='text/javascript' src="assets/js/bootstrap-datepicker.eu.js"></script>
         <script type='text/javascript' src='../app/assets/js/knockout-2.0.0.js'></script>
-        <script type='text/javascript' src='../app/assets/js/knockout.mapping-latest.js'></script>
         <script type='text/javascript' src='../app/assets/js/data.js'></script>
         <script type='text/javascript' src='../app/assets/js/model.js'></script>
         <script type='text/javascript' src='src/js/model.js'></script>
@@ -89,8 +88,8 @@
                         <div data-bind="visible: $root.egunaGehitu">
                             <form class="well" data-bind="with: $root.egunBerria">
                                 <label>Data</label>
-                                <div class="input-append date datepicker" data-date-format="yyyy-mm-dd">
-                                    <input class="span10" size="12" type="text" data-bind="value: data" readonly required="required">
+                                <div class="input-append date datepicker" data-bind="datePicker: data">
+                                    <input class="span10" size="12" type="text" readonly required="required">
                                     <span class="add-on"><i class="icon-th"></i></span>
                                 </div>
                                 <label>Izena</label>
@@ -118,7 +117,7 @@
                                     <div data-bind="visible: $root.egunaEditagarriaDa(id)">
                                         <form class="well">
                                             <label>Data</label>
-                                            <div class="input-append date datepicker" data-date-format="yyyy-mm-dd">
+                                            <div class="input-append date datepicker" data-bind="datePicker: data">
                                                 <input class="span10" size="12" type="text" data-bind="value: data" readonly>
                                                 <span class="add-on"><i class="icon-th"></i></span>
                                             </div>

@@ -74,7 +74,6 @@ function Eguna(id) {
             } else {
                 orduKatea = "0" + self.hasieraOrdua() + ":00";
             }
-            console.log(orduKatea);
             // 08 < 09
             // 09 < 07
             var result;
@@ -87,7 +86,6 @@ function Eguna(id) {
                     result = 1;
                 }
             }
-            console.log(result);
             return result;
         });
     };
