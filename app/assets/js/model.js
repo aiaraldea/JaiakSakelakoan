@@ -4,15 +4,11 @@ AppEguna.prototype.days = ["Igandea", "Astelehena", "Asteartea", "Asteazkena", "
 AppEguna.prototype.months= ["Urtarrila", "Otsaila", "Martxoa", "Apirila", "Maiatza", "Ekaina", "Uztaila", "Abuztua", "Iraila", "Urria", "Azaroa", "Abendua"];
 
 // Class to represent a row in the festival days grid
-function AppEguna(data, izena, deialdiak) {
-    var self, dldk, i;
-    if (typeof AppEguna.counter === 'undefined') {
-        // It has not... perform the initilization
-        AppEguna.counter = 0;
-    }
+function AppEguna(id) {
+    var self;
     self = this;
-    self.id = AppEguna.counter++;
-    self.data = ko.observable(data);
+    self.id = id;
+    self.data = ko.observable(); // Zergatik observable??
     
     self.dataString = ko.computed(function () {
         var d = new Date(self.data());
@@ -21,18 +17,9 @@ function AppEguna(data, izena, deialdiak) {
         var dw = AppEguna.prototype.days[d.getDay()];
         return "" + m + "k "+ dd + ", " + dw;
     });
-    self.izena = ko.observable(izena);
-    if (typeof deialdiak === 'function') {
-        self.deialdiak = deialdiak;
-    } else {
-        self.deialdiak = ko.observableArray(deialdiak);
-    }
-    dldk = self.deialdiak();
-    if (typeof dldk !== 'undefined') {
-        for (i = 0; i < dldk.length; i++) {
-            dldk[i].eguna = self;
-        }
-    }
+    self.izena = ""; // Zergatik observable??
+    self.deialdiak = ko.observableArray();
+    self.deialdiak = ko.observableArray();
     self.url = ko.computed(function () {
         return "#eguna?id=" + self.id;
     });
@@ -40,16 +27,43 @@ function AppEguna(data, izena, deialdiak) {
     self.toggleEditagarria = function () {
         self.editagarria(!self.editagarria());
     };
+    
+    self.klonatuDeialdia = function(deialdia) {
+        var deialdiBerria = new AppDeialdi(deialdia.id);
+        deialdiBerria.eguna = self;
+        if (typeof deialdia.ordua === 'function') {
+            deialdiBerria.ordua = deialdia.ordua();
+        } else {
+            deialdiBerria.ordua = deialdia.ordua;
+        }
+        if (typeof deialdia.izenburua === 'function') {
+            deialdiBerria.izenburua = deialdia.izenburua();
+        } else {
+            deialdiBerria.izenburua = deialdia.izenburua;
+        }
+        if (typeof deialdia.xehetasunak === 'function') {
+            deialdiBerria.xehetasunak = deialdia.xehetasunak();
+        } else {
+            deialdiBerria.xehetasunak = deialdia.xehetasunak;
+        }
+        if (typeof deialdia.hautatua === 'function') {
+            deialdiBerria.hautatua(deialdia.hautatua());
+        } else {
+            deialdiBerria.hautatua(deialdia.hautatua);
+        }
+        
+        return deialdiBerria;
+    };
 }
 
 // Class to represent an event in a festival day
-function AppDeialdi(id, ordua, izenburua, xehetasunak) {
+function AppDeialdi(id) {
     var self = this;
     self.id = parseInt(id);
-    self.ordua = ko.observable(ordua);
+    self.ordua = "00:00";
     self.eguna = null;
-    self.izenburua = izenburua;
-    self.xehetasunak = xehetasunak;
+    self.izenburua = "";
+    self.xehetasunak = "";
     self.url = ko.computed(function () {
         return "#deialdia?id=" + self.id;
     });
@@ -79,8 +93,9 @@ function AppDeialdi(id, ordua, izenburua, xehetasunak) {
 function AppJaia() {
     var self, egunak, eguna, i, j, current;
     self = this;
-    self.izena = ko.observable();
-    self.kartelarenEgilea = ko.observable();
+    self.izena = "";
+    self.kartelarenEgilea = "";
+    self.xehetasunak = "";
     self.hautatutakoEguna = ko.observable();
     self.hautatutakoDeialdia = ko.observable();
 
@@ -123,19 +138,74 @@ function AppJaia() {
             }
         }
     };
+    
     self.save = function () {
-        var mapping = {
-            'ignore': ["url", "jaia", 'eguna', 'hautatutakoEguna', 'hautatutakoDeialdia', 'hautatuaMezua'],
-            'egunak' : {
-                'ignore': ["url", "jaia", 'eguna']
-            },
-            'deialdiak' : {
-                'ignore': ['url', 'jaia', 'eguna']
-            }
-        };
-        var jsonString = ko.mapping.toJSON(self, mapping);
+        var jsonString = self.exportJson();
         window.localStorage.setItem("data", jsonString);
         window.localStorage.setItem("data-date", new Date().getTime());
+    };
+    self.exportJs = function () {
+        var i, j, jaia, egunaOrig, eguna, deialdiak, deialdiaOrig, deialdia;
+        jaia = {};
+        jaia.izena = self.izena;
+        jaia.kartelarenEgilea = self.kartelarenEgilea;
+        jaia.xehetasunak = self.xehetasunak;
+        jaia.egunak = [];
+        for (i = 0; i < self.egunak().length; i++) {
+            egunaOrig = self.egunak()[i];
+            eguna = {};
+            eguna.id = egunaOrig.id;
+            eguna.data = egunaOrig.data();
+            eguna.izena = egunaOrig.izena;
+            deialdiak = [];
+            for (j = 0; j < egunaOrig.deialdiak().length; j++) {
+                deialdiaOrig = egunaOrig.deialdiak()[j];
+                deialdia = {};
+                deialdia.id = deialdiaOrig.id;
+                deialdia.ordua = deialdiaOrig.ordua;
+                deialdia.izenburua = deialdiaOrig.izenburua;
+                deialdia.xehetasunak = deialdiaOrig.xehetasunak;
+                deialdia.hautatua = deialdiaOrig.hautatua();
+                deialdiak.push(deialdia);
+            }
+            eguna.deialdiak = deialdiak;
+            jaia.egunak.push(eguna);
+        }
+        return jaia;
+    };
+    self.exportJson = function () {
+        var jaia, string;
+        jaia  = self.exportJs();
+        string = JSON.stringify(jaia, undefined, 2);
+        return string;
+    };
+    self.klonatuEguna = function(eguna) {
+        var i, deialdia;
+        var egunBerria = new AppEguna(eguna.id);
+        egunBerria.jaia = self;
+        if (typeof eguna.data === 'function') {
+            egunBerria.data(eguna.data());
+        } else {
+            egunBerria.data(eguna.data);
+        }
+        if (typeof eguna.izena === 'function') {
+            egunBerria.izena = eguna.izena();
+        } else {
+            egunBerria.izena = eguna.izena;
+        }
+        var deialdiak;
+        if (typeof eguna.deialdiak === 'function') {
+            deialdiak = eguna.deialdiak();
+        } else {
+            deialdiak = eguna.deialdiak;
+        }
+        
+        for (i = 0; i < deialdiak.length; i++) {
+            deialdia = egunBerria.klonatuDeialdia(deialdiak[i]);
+            egunBerria.deialdiak.push(deialdia);
+        }        
+        
+        return egunBerria;
     };
 
     self.egunak.subscribe(function (egunak) {
@@ -153,76 +223,42 @@ function AppJaia() {
     };
 }
 
-AppJaia.mapDeialdiak = function (deialdiak) {
-    if (deialdiak !== undefined) {
-        return ko.mapping.fromJS(deialdiak, {
-            create: function (options) {
-                return new AppDeialdi(options.data.id, options.data.ordua, options.data.izenburua, options.data.xehetasunak);
-            }
-        });
-    }
+AppJaia.loadFromFile = function () {
+    return AppJaia.loadFromData(data);
 };
 
-AppJaia.mapping = {
-    'egunak': {
-        create: function (options) {
-            var eguna = new AppEguna(
-                options.data.data,
-                options.data.izena,
-                AppJaia.mapDeialdiak(options.data.deialdiak)
-                );
-            return eguna;
-        },
-        key: function (data) {
-            return ko.utils.unwrapObservable(data.id);
-        }
-    }
-};
-AppJaia.loadFromFile = function () {
-    var jaia = new AppJaia();
-    jaia.izena = data.izena;
-    jaia.kartelarenEgilea = data.kartelarenEgilea;
-    jaia.egunak = ko.observableArray();
-    for (var i=0;i<data.egunak.length;i++) {
-        var egunaOrig = data.egunak[i];
-        var deialdiak = new Array();
-        for(var j=0; j<egunaOrig.deialdiak.length; j++) {
-            var deialdiaOrig = egunaOrig.deialdiak[j];
-            var deialdia = new AppDeialdi(deialdiaOrig.id, deialdiaOrig.ordua, deialdiaOrig.izenburua, deialdiaOrig.xehetasunak);
-            deialdia.hautatua(deialdiaOrig.hautatua);
-            deialdiak.push(deialdia);
-        }
-        var eguna = new AppEguna(egunaOrig.data, egunaOrig.izena, deialdiak);
-        eguna.jaia = jaia;
-        jaia.egunak.push(eguna);
-    }
-    return jaia;
-}
 AppJaia.loadFromStorage = function() {
     var jsonData = window.localStorage.getItem("data");
     if (typeof jsonData === "undefined") {
         return null;
     }
     var dfs = JSON.parse(jsonData);
-    var jaia = new AppJaia();
-    jaia.izena = dfs.izena;
-    jaia.kartelarenEgilea = dfs.kartelarenEgilea;
-    jaia.egunak = ko.observableArray();
-    for (var i=0;i<dfs.egunak.length;i++) {
-        var egunaOrig = dfs.egunak[i];
-        var deialdiak = new Array();
-        for(var j=0; j<egunaOrig.deialdiak.length; j++) {
-            var deialdiaOrig = egunaOrig.deialdiak[j];
-            var deialdia = new AppDeialdi(deialdiaOrig.id, deialdiaOrig.ordua, deialdiaOrig.izenburua, deialdiaOrig.xehetasunak);
-            deialdia.hautatua(deialdiaOrig.hautatua);
-            deialdiak.push(deialdia);
-        }
-        var eguna = new AppEguna(egunaOrig.data, egunaOrig.izena, deialdiak);
-        eguna.jaia = jaia;
+    return AppJaia.loadFromData(dfs);
+};
+
+AppJaia.klonatuJaia = function(jaiaJatorria) {
+    var i, jaia, eguna;
+    jaia = new AppJaia();
+        
+    jaia.izena = jaiaJatorria.izena;
+    jaia.kartelarenEgilea = jaiaJatorria.kartelarenEgilea;
+    jaia.xehetasunak = jaiaJatorria.xehetasunak;
+    var egunak;
+    if (typeof jaiaJatorria.egunak === 'function') {
+        egunak = jaiaJatorria.egunak();
+    } else {
+        egunak = jaiaJatorria.egunak;
+    }    
+    for (i = 0; i < egunak.length; i++) {
+        eguna = jaia.klonatuEguna(egunak[i]);
         jaia.egunak.push(eguna);
     }
     return jaia;
-}
+};
+
+AppJaia.loadFromData = function (data) {
+    return AppJaia.klonatuJaia(data);
+};
 
 AppJaia.init = function() {
     var savedDate = window.localStorage.getItem("data-date");

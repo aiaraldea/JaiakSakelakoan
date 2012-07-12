@@ -1,7 +1,9 @@
 * Only reorder events on accept and creation
-* Export and inport festival details
+* Export and import festival details [done]
 * Add Wysigwg to detail textareas
 * Knockout custom bindinds for datepicker
-* Tests
+* Tests [in process]
+* Highlight the day being edited
+* Highlight the current day in the app
 
 * Multiple festivals

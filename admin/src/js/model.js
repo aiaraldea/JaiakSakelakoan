@@ -148,7 +148,7 @@ function Jaia() {
     
     self.klonatuEguna = function(eguna) {
         var i, deialdia;
-        var egunBerria = new Eguna();
+        var egunBerria = new Eguna(eguna.id);
         egunBerria.jaia = self;
         if (typeof eguna.data === 'function') {
             egunBerria.data(eguna.data());
