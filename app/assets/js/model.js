@@ -1,8 +1,10 @@
 "use strict";
+
+AppEguna.prototype.days = ["Igandea", "Astelehena", "Asteartea", "Asteazkena", "Osteguna", "Ostirala", "Larunbata", "Igandea"];
+AppEguna.prototype.months= ["Urtarrila", "Otsaila", "Martxoa", "Apirila", "Maiatza", "Ekaina", "Uztaila", "Abuztua", "Iraila", "Urria", "Azaroa", "Abendua"];
+
 // Class to represent a row in the festival days grid
 function AppEguna(data, izena, deialdiak) {
-    var days = ["Igandea", "Astelehena", "Asteartea", "Asteazkena", "Osteguna", "Ostirala", "Larunbata", "Igandea"];
-    var months= ["Urtarrila", "Otsaila", "Martxoa", "Apirila", "Maiatza", "Ekaina", "Uztaila", "Abuztua", "Iraila", "Urria", "Azaroa", "Abendua"];
     var self, dldk, i;
     if (typeof AppEguna.counter === 'undefined') {
         // It has not... perform the initilization
@@ -14,9 +16,9 @@ function AppEguna(data, izena, deialdiak) {
     
     self.dataString = ko.computed(function () {
         var d = new Date(self.data());
-        var m = months[d.getMonth()];
+        var m = AppEguna.prototype.months[d.getMonth()];
         var dd = d.getDate();
-        var dw = days[d.getDay()];
+        var dw = AppEguna.prototype.days[d.getDay()];
         return "" + m + "k "+ dd + ", " + dw;
     });
     self.izena = ko.observable(izena);
@@ -39,6 +41,7 @@ function AppEguna(data, izena, deialdiak) {
         self.editagarria(!self.editagarria());
     };
 }
+
 // Class to represent an event in a festival day
 function AppDeialdi(id, ordua, izenburua, xehetasunak) {
     var self = this;

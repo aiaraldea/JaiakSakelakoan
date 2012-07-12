@@ -108,12 +108,10 @@ function App() {
         self.egunaGehitu(false);
         self.deialdiaGehitu(!self.deialdiaGehitu());
     };
-    
-    self.egunBerria = ko.observable(new Eguna());
-    
+        
     self.gehituEguna = function () {
         self.jaia().egunak.push(self.egunBerria());
-        self.egunBerria(new Eguna());
+        self.egunBerria(self.jaia().sortuEguna());
         //self.egunaGehitu(false);
         self.jaia().sort();
     };
@@ -153,6 +151,7 @@ App.init = function () {
     }
     var app = new App();
     app.jaia(Jaia.loadFromStorage());
+    app.egunBerria = ko.observable(app.jaia().sortuEguna());
     window.viewModel = app;
 };
 

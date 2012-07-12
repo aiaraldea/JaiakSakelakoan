@@ -1,38 +1,31 @@
 "use strict";
 
+
 // Class to represent a row in the festival days grid
-function Eguna(data, izena, deialdiak) {
-    var days = ["Igandea", "Astelehena", "Asteartea", "Asteazkena", "Osteguna", "Ostirala", "Larunbata", "Igandea"];
-    var months= ["Urtarrila", "Otsaila", "Martxoa", "Apirila", "Maiatza", "Ekaina", "Uztaila", "Abuztua", "Iraila", "Urria", "Azaroa", "Abendua"];
-    
-    var i, dldk;
+function Eguna(id) {
     if (typeof Eguna.counter === 'undefined') {
         Eguna.counter = 0;
     }
     var self = this;
     // datuak
-    self.id = Eguna.counter++;
-    self.data = ko.observable(data);
+    if (id > Eguna.counter) {
+        Eguna.counter = id + 1;
+    }
+    if(typeof id=="undefined") {
+        id = Eguna.counter++;
+    }
+    self.id = id;
+    self.data = ko.observable();
     self.dataString = ko.computed(function () {
         var d = new Date(self.data());
-        var m = months[d.getMonth()];
+        var m = AppEguna.prototype.months[d.getMonth()];
         var dd = d.getDate();
-        var dw = days[d.getDay()];
+        var dw = AppEguna.prototype.days[d.getDay()];
         return "" + m + "k "+ dd + ", " + dw;
     });
-    self.izena = ko.observable(izena);
+    self.izena = ko.observable();
     // erlazioak
-    if (typeof deialdiak === 'function') {
-        self.deialdiak = deialdiak;
-    } else {
-        self.deialdiak = ko.observableArray(deialdiak);
-    }
-    dldk = self.deialdiak();
-    if (typeof dldk !== 'undefined') {
-        for (i = 0; i < dldk.length; i++) {
-            dldk[i].eguna = self;
-        }
-    }
+    self.deialdiak = ko.observableArray();
     self.jaia = null;
     // transient
     self.editagarria = ko.observable(false);
@@ -41,6 +34,35 @@ function Eguna(data, izena, deialdiak) {
     self.toggleEditagarria = function () {
         self.editagarria(!self.editagarria());
     };
+    
+    self.sortuDeialdia = function() {
+        var deialdia = new Deialdi();
+        deialdia.eguna = self;
+        return deialdia;
+    };
+    
+    self.klonatuDeialdia = function(deialdia) {
+        var deialdiBerria = new Deialdi(deialdia.id);
+        deialdiBerria.eguna = self;
+        if (typeof deialdia.ordua === 'function') {
+            deialdiBerria.ordua(deialdia.ordua());
+        } else {
+            deialdiBerria.ordua(deialdia.ordua);
+        }
+        if (typeof deialdia.izenburua === 'function') {
+            deialdiBerria.izenburua(deialdia.izenburua());
+        } else {
+            deialdiBerria.izenburua(deialdia.izenburua);
+        }
+        if (typeof deialdia.xehetasunak === 'function') {
+            deialdiBerria.xehetasunak = deialdia.xehetasunak;
+        } else {
+            deialdiBerria.xehetasunak(deialdia.xehetasunak);
+        }
+        
+        return deialdiBerria;
+    };
+    
     self.sort = function () {
         self.deialdiak.sort(function (left, right) {
             if (left.ordua() === right.ordua()) {
@@ -73,18 +95,10 @@ function Eguna(data, izena, deialdiak) {
     self.hasieraOrdua.subscribe(function (ordua) {
         self.sort();
     });
-    
-//    self.data.subscribe(function (data) {
-//        console.log("self.jaia");
-//        console.log(self.jaia);
-//        if (self.jaia !== null) {
-//            self.jaia.sort();
-//        }
-//    });
 }
 
 // Class to represent an event in a festival day
-function Deialdi(id, ordua, izenburua, xehetasunak) {
+function Deialdi(id) {
     if (typeof Deialdi.counter === 'undefined') {
         // It has not... perform the initilization
         Deialdi.counter = 0;
@@ -93,11 +107,14 @@ function Deialdi(id, ordua, izenburua, xehetasunak) {
     // datuak
     if (id > Deialdi.counter) {
         Deialdi.counter = id + 1;
+    } 
+    if(typeof id=="undefined") {
+        id = Deialdi.counter++;
     }
     self.id = id;
-    self.ordua = ko.observable(ordua);
-    self.izenburua = ko.observable(izenburua);
-    self.xehetasunak = ko.observable(xehetasunak);
+    self.ordua = ko.observable();
+    self.izenburua = ko.observable();
+    self.xehetasunak = ko.observable();
     // erlazioak
     self.eguna = null;
     // transient
@@ -122,6 +139,41 @@ function Jaia() {
 
     // Editable data
     self.egunak = ko.observableArray();
+    
+    self.sortuEguna = function() {
+        var eguna = new Eguna();
+        eguna.jaia = self;
+        return eguna;
+    };
+    
+    self.klonatuEguna = function(eguna) {
+        var i, deialdia;
+        var egunBerria = new Eguna();
+        egunBerria.jaia = self;
+        if (typeof eguna.data === 'function') {
+            egunBerria.data(eguna.data());
+        } else {
+            egunBerria.data(eguna.data);
+        }
+        if (typeof eguna.izena === 'function') {
+            egunBerria.izena(eguna.izena());
+        } else {
+            egunBerria.izena(eguna.izena);
+        }
+        var deialdiak;
+        if (typeof eguna.deialdiak === 'function') {
+            deialdiak = eguna.deialdiak();
+        } else {
+            deialdiak = eguna.deialdiak;
+        }
+        
+        for (i = 0; i < deialdiak.length; i++) {
+            deialdia = egunBerria.klonatuDeialdia(deialdiak[i]);
+            egunBerria.deialdiak.push(deialdia);
+        }        
+        
+        return egunBerria;
+    };
 
     self.save = function () {
         var jsonString = self.exportJson();
@@ -133,6 +185,7 @@ function Jaia() {
         jaia = {};
         jaia.izena = self.izena();
         jaia.kartelarenEgilea = self.kartelarenEgilea();
+        jaia.xehetasunak = self.xehetasunak();
         jaia.egunak = [];
         for (i = 0; i < self.egunak().length; i++) {
             egunaOrig = self.egunak()[i];
@@ -223,97 +276,63 @@ function Jaia() {
     
     self.sort = function () {
         self.egunak.sort(function (left, right) {
-            if (left.data() === right.data()) {
-                console.log(0);
-                return 0;
-            }
-            if (left.data() > right.data()) {
-                console.log-(1);
-                return 1;
-            } else {
-                console.log(-1);
+            if (left.data() < right.data()) {
                 return -1;
             }
+            if (left.data() > right.data()) {
+                return 1;
+            }
+            return 0;
         });
     };
 }
 
-Jaia.mapDeialdiak = function (deialdiak) {
-    if (deialdiak !== undefined) {
-        return ko.mapping.fromJS(deialdiak, {
-            create: function (options) {
-                return new Deialdi(options.data.id, options.data.ordua, options.data.izenburua, options.data.xehetasunak);
-            }
-        });
+Jaia.klonatuJaia = function(jaiaJatorria) {
+    var i, jaia, eguna;
+    jaia = new Jaia();
+    
+    if (typeof jaiaJatorria.izena === 'function') {
+        jaia.izena(jaiaJatorria.izena());
+    } else {
+        jaia.izena(jaiaJatorria.izena);
     }
+    if (typeof jaiaJatorria.kartelarenEgilea === 'function') {
+        jaia.kartelarenEgilea(jaiaJatorria.kartelarenEgilea());
+    } else {
+        jaia.kartelarenEgilea(jaiaJatorria.kartelarenEgilea);
+    }
+    if (typeof jaiaJatorria.xehetasunak === 'function') {
+        jaia.xehetasunak(jaiaJatorria.xehetasunak());
+    } else {
+        jaia.xehetasunak(jaiaJatorria.xehetasunak);
+    }
+    var egunak;
+    if (typeof jaiaJatorria.egunak === 'function') {
+        egunak = jaiaJatorria.egunak();
+    } else {
+        egunak = jaiaJatorria.egunak;
+    }    
+    for (i = 0; i < egunak.length; i++) {
+        eguna = jaia.klonatuEguna(egunak[i]);
+        jaia.egunak.push(eguna);
+    }
+    return jaia;
 };
 
-Jaia.loadFromdata = function (data) {
-    var i, j, jaia, egunaOrig, deialdiak, deialdiaOrig, deialdia, eguna;
-    jaia = new Jaia();
-    jaia.izena(data.izena);
-    jaia.kartelarenEgilea(data.kartelarenEgilea);
-    jaia.egunak = ko.observableArray();
-    for (i = 0; i < data.egunak.length; i++) {
-        egunaOrig = data.egunak[i];
-        deialdiak = [];
-        for (j = 0; j < egunaOrig.deialdiak.length; j++) {
-            deialdiaOrig = egunaOrig.deialdiak[j];
-            deialdia = new Deialdi(deialdiaOrig.id, deialdiaOrig.ordua, deialdiaOrig.izenburua, deialdiaOrig.xehetasunak);
-            //            deialdia.hautatua(deialdiaOrig.hautatua);
-            deialdiak.push(deialdia);
-        }
-        eguna = new Eguna(egunaOrig.data, egunaOrig.izena, deialdiak);
-        eguna.id = egunaOrig.id;
-        eguna.jaia = jaia;
-        jaia.egunak.push(eguna);
-    }
-    return jaia;
+Jaia.loadFromData = function (data) {
+    return Jaia.klonatuJaia(data);
 };
+
 Jaia.loadFromFile = function () {
-    var jaia, i, j, egunaOrig, deialdiak, deialdiaOrig, deialdia, eguna;
-    jaia = new Jaia();
-    jaia.izena(data.izena);
-    jaia.kartelarenEgilea(data.kartelarenEgilea);
-    jaia.egunak = ko.observableArray();
-    for (i = 0; i < data.egunak.length; i++) {
-        egunaOrig = data.egunak[i];
-        deialdiak = [];
-        for (j = 0; j < egunaOrig.deialdiak.length; j++) {
-            deialdiaOrig = egunaOrig.deialdiak[j];
-            deialdia = new Deialdi(deialdiaOrig.id, deialdiaOrig.ordua, deialdiaOrig.izenburua, deialdiaOrig.xehetasunak);
-//            deialdia.hautatua(deialdiaOrig.hautatua);
-            deialdiak.push(deialdia);
-        }
-        eguna = new Eguna(egunaOrig.data, egunaOrig.izena, deialdiak);
-        eguna.jaia = jaia;
-        jaia.egunak.push(eguna);
-    }
-    return jaia;
+    return Jaia.loadFromData(data);
 };
+
 Jaia.loadFromStorage = function () {
-    var dfs, jaia, i, j, jsonData, egunaOrig, deialdiak, deialdiaOrig, deialdia, eguna;
+    var dfs, jsonData;
     jsonData = window.localStorage.getItem("data");
     if (typeof jsonData === "undefined") {
         return null;
     }
     dfs = JSON.parse(jsonData);
-    jaia = new Jaia();
-    jaia.izena(dfs.izena);
-    jaia.kartelarenEgilea(dfs.kartelarenEgilea);
-    jaia.egunak = ko.observableArray();
-    for (i = 0; i < dfs.egunak.length; i++) {
-        egunaOrig = dfs.egunak[i];
-        deialdiak =  [];
-        for (j = 0; j < egunaOrig.deialdiak.length; j++) {
-            deialdiaOrig = egunaOrig.deialdiak[j];
-            deialdia = new Deialdi(deialdiaOrig.id, deialdiaOrig.ordua, deialdiaOrig.izenburua, deialdiaOrig.xehetasunak);
-            //            deialdia.hautatua(deialdiaOrig.hautatua);
-            deialdiak.push(deialdia);
-        }
-        eguna = new Eguna(egunaOrig.data, egunaOrig.izena, deialdiak);
-        eguna.jaia = jaia;
-        jaia.egunak.push(eguna);
-    }
-    return jaia;
+    return Jaia.loadFromData(dfs);
 };
