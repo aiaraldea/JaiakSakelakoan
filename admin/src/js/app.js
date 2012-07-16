@@ -136,14 +136,28 @@ function App() {
 }
 
 App.init = function () {
-    var savedDate = window.localStorage.getItem("data-date");
+    var jaiakString = window.localStorage.getItem("jaia.list");
+    var jaienDatak = JSON.parse(jaiakString)||{};
+    var last;
+    // momentuz azkena erabiliko dut, geroago aplikazio anitz kudeatzeko gaitasuna
+    // gehitu nahi dut.
+    for (var name in jaienDatak) {
+      if (jaienDatak.hasOwnProperty(name)) {
+      }
+      last = name;
+    }
+    var savedDate = jaienDatak[name];
     var origData = 1335994581394;
-    if (savedDate < origData) {
+    if (savedDate == null || savedDate < origData) {
         var j = Jaia.loadFromFile();
         j.save();
     }
     var app = new App();
-    app.jaia(Jaia.loadFromStorage());
+      try {
+        app.jaia(Jaia.loadFromStorage());
+      } catch( err ) {
+          console.log(err);
+      }
     app.egunBerria = ko.observable(app.jaia().sortuEguna());
     window.viewModel = app;
 };

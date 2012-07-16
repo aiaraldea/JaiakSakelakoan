@@ -141,9 +141,9 @@ function AppJaia() {
     
     self.save = function () {
         var jsonString = self.exportJson();
-        window.localStorage.setItem("data", jsonString);
-        window.localStorage.setItem("data-date", new Date().getTime());
+        AppJaia.saveToStorage(jsonString, self.makinaIzena);
     };
+    
     self.exportJs = function () {
         var i, j, jaia, egunaOrig, eguna, deialdiak, deialdiaOrig, deialdia;
         jaia = {};
@@ -228,12 +228,42 @@ AppJaia.loadFromFile = function () {
 };
 
 AppJaia.loadFromStorage = function() {
-    var jsonData = window.localStorage.getItem("data");
-    if (typeof jsonData === "undefined") {
+    var dfs = AppJaia.loadObjectFromStorage();
+    return AppJaia.loadFromData(dfs);
+};
+
+AppJaia.loadObjectFromStorage = function() {
+    var jaiakString = window.localStorage.getItem("jaia.list");
+    var jaienDatak = JSON.parse(jaiakString)||{};
+    var last;
+    // momentuz azkena erabiliko dut, geroago aplikazio anitz kudeatzeko gaitasuna
+    // gehitu nahi dut.
+    for (var name in jaienDatak) {
+      if (jaienDatak.hasOwnProperty(name)) {
+      }
+      last = name;
+    }
+    var jsonData = window.localStorage.getItem(last+".data");
+    if (jsonData == null) {
         return null;
     }
-    var dfs = JSON.parse(jsonData);
-    return AppJaia.loadFromData(dfs);
+    return JSON.parse(jsonData);
+};
+
+AppJaia.saveToStorage = function (data, name) {
+    console.log(name);
+    var itemName;
+    if (name != null && name.length > 0) {
+        itemName = "jaia-"+name;
+    } else {
+        itemName = "jaia";
+    }
+    var jaiakString = window.localStorage.getItem("jaia.list");
+    var jaienDatak = JSON.parse(jaiakString)||{};
+    jaienDatak[itemName] = new Date().getTime();
+    jaiakString = JSON.stringify(jaienDatak);
+    window.localStorage.setItem("jaia.list", jaiakString);
+    window.localStorage.setItem(itemName + ".data", data); 
 };
 
 AppJaia.klonatuJaia = function(jaiaJatorria) {

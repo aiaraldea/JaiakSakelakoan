@@ -129,6 +129,7 @@ function Deialdi(id) {
 // Overall viewmodel for this screen, along with initial state
 function Jaia() {
     var self = this;
+    self.makinaIzena = "amurrio";
     self.izena = ko.observable();
     self.kartelarenEgilea = ko.observable();
     self.xehetasunak = ko.observable();
@@ -173,8 +174,7 @@ function Jaia() {
 
     self.save = function () {
         var jsonString = self.exportJson();
-        window.localStorage.setItem("data", jsonString);
-        window.localStorage.setItem("data-date", new Date().getTime());
+        AppJaia.saveToStorage(jsonString, self.makinaIzena);
     };
     self.exportJs = function () {
         var i, j, jaia, egunaOrig, eguna, deialdiak, deialdiaOrig, deialdia;
@@ -233,9 +233,7 @@ function Jaia() {
         }
 
         string = JSON.stringify(jaia, undefined, 2);
-
-        window.localStorage.setItem("data", string);
-        window.localStorage.setItem("data-date", new Date().getTime());
+        AppJaia.saveToStorage(string, self.makinaIzena);
     };
 
     self.findDeialdiById = function (jaia, deialdiId) {
@@ -324,11 +322,9 @@ Jaia.loadFromFile = function () {
 };
 
 Jaia.loadFromStorage = function () {
-    var dfs, jsonData;
-    jsonData = window.localStorage.getItem("data");
-    if (typeof jsonData === "undefined") {
-        return null;
+    var dfs = AppJaia.loadObjectFromStorage();
+    if (dfs == null) {
+        throw new Error("No data loaded from storage");
     }
-    dfs = JSON.parse(jsonData);
     return Jaia.loadFromData(dfs);
 };

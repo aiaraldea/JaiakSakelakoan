@@ -2,7 +2,8 @@
 * Export and import festival details [eginda]
 * Knockout custom bindinds for datepicker [eginda]
 * Tests [in process]
-* Test event sorting
+* Test event sorting [eginda]
+* User a different storage key for each festival [eginda]
 * Add Wysigwg to detail textareas
 * Highlight the day being edited
 * Highlight the current day in the app
