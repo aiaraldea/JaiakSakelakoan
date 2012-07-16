@@ -1,4 +1,4 @@
-test( "basic load from data", function() {
+test( "Kudeaketaren datuen inportazioa", function() {
     var data = {
     "izena": "Amurrioko jaiak 2012",
     "kartelarenEgilea": "egilea",
@@ -52,7 +52,7 @@ test( "basic load from data", function() {
     equal(jaia.egunak()[0].deialdiak()[0].ordua(), "18:00", "Lehenengo deialdiaren ordua");
 });
 
-test("Oinarrizko jaiaren esportazioa", function() {
+test("Kudeaketaren datuen esportazioa", function() {
     var jaia = new Jaia();
     jaia.izena("jaiaren izena");
     jaia.kartelarenEgilea("kartelaren egilea");

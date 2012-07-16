@@ -77,15 +77,19 @@ function Eguna(id) {
             // 08 < 09
             // 09 < 07
             var result;
-            if ((left.ordua() <= orduKatea && right.ordua() <= orduKatea) || (left.ordua() >= orduKatea && right.ordua() >= orduKatea)) {
-                result =  (left.ordua() < right.ordua()? -1 : 1);
+            console.log("orduKatea; " + orduKatea+ ", left: "+ left.ordua()+ ", right: " +right.ordua());
+            if ((left.ordua() < orduKatea && right.ordua() < orduKatea) || (left.ordua() >= orduKatea && right.ordua() >= orduKatea)) {
+            console.log('direct');
+                result = (left.ordua() < right.ordua()? -1 : 1);
             } else {
+            console.log('compare!!');
                 if (left.ordua() > orduKatea) {
                     result = -1;
                 } else {
                     result = 1;
                 }
             }
+            console.log(result);
             return result;
         });
     };
