@@ -67,19 +67,15 @@ function Eguna(id) {
             // 08 < 09
             // 09 < 07
             var result;
-            console.log("orduKatea; " + orduKatea+ ", left: "+ left.ordua()+ ", right: " +right.ordua());
             if ((left.ordua() < orduKatea && right.ordua() < orduKatea) || (left.ordua() >= orduKatea && right.ordua() >= orduKatea)) {
-            console.log('direct');
                 result = (left.ordua() < right.ordua()? -1 : 1);
             } else {
-            console.log('compare!!');
                 if (left.ordua() > orduKatea) {
                     result = -1;
                 } else {
                     result = 1;
                 }
             }
-            console.log(result);
             return result;
         });
     };
@@ -150,7 +146,6 @@ function Jaia() {
         
         for (i = 0; i < deialdiak.length; i++) {
             deialdia = ko.validatedObservable(egunBerria.klonatuDeialdia(deialdiak[i]));
-            console.log(deialdia().id);
             egunBerria.deialdiak.push(deialdia);
         }        
         
@@ -178,10 +173,10 @@ function Jaia() {
             for (j = 0; j < egunaOrig.deialdiak().length; j++) {
                 deialdiaOrig = egunaOrig.deialdiak()[j];
                 deialdia = {};
-                deialdia.id = deialdiaOrig.id;
-                deialdia.ordua = deialdiaOrig.ordua();
-                deialdia.izenburua = deialdiaOrig.izenburua();
-                deialdia.xehetasunak = deialdiaOrig.xehetasunak();
+                deialdia.id = deialdiaOrig().id;
+                deialdia.ordua = deialdiaOrig().ordua();
+                deialdia.izenburua = deialdiaOrig().izenburua();
+                deialdia.xehetasunak = deialdiaOrig().xehetasunak();
                 deialdiak.push(deialdia);
             }
             eguna.deialdiak = deialdiak;

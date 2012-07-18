@@ -59,14 +59,22 @@ test("Kudeaketaren datuen esportazioa", function() {
     jaia.xehetasunak("Jaiaren xehetasunak");
     
     jaia.egunak = ko.observableArray();
-    var eguna = new Eguna("2012-01-01", "egunaren izena", []);
+    var eguna = jaia.sortuEguna();
+    eguna.data("2012-01-01");
+    eguna.izena("egunaren izena");
     jaia.egunak.push(eguna);
-    //var  deialdia = new Deialdi(0, deialdiaOrig.ordua, deialdiaOrig.izenburua, deialdiaOrig.xehetasunak);
+    var deialdia = eguna.sortuDeialdia();
+    deialdia.ordua("19:00");
+    eguna.deialdiak().push(ko.validatedObservable(deialdia));
     
     var data = jaia.exportJs();
     equal(data.izena, jaia.izena(), "Jaiaren izena");
     equal(data.kartelarenEgilea, jaia.kartelarenEgilea(), "Jaiaren kartelaren egilea");
     equal(data.xehetasunak, jaia.xehetasunak(), "Jaiaren xehetasunak");
-    equal(jaia.egunak().length, 1, "1 egun dago");
+    equal(data.egunak.length, 1, "1 egun dago");
+    equal(data.egunak[0].data, "2012-01-01", "Egunaren data");
+    equal(data.egunak[0].deialdiak.length, 1, "Lehenengo egunean deialdi bat dago");
+    equal(data.egunak[0].deialdiak[0].id, 0, "Lehenengo deialdiaren IDa");
+    equal(data.egunak[0].deialdiak[0].ordua, "19:00", "Lehenengo deialdiaren ordua");
     
 }); 
