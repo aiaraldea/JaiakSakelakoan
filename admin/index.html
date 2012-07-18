@@ -108,7 +108,7 @@
                         <tbody data-bind="foreach: egunak">
                             <tr>
                                 <td>
-                                    <div style="min-height: 36px;" data-bind="visible: !$root.egunaEditagarriaDa(id)">
+                                    <div class="jaia-eguna" data-bind="visible: !$root.egunaEditagarriaDa(id), css: { hautatua: $root.hautatutakoEguna() === $data }">
                                         <button class="btn" data-bind="click: $root.ezarriEditatzekoEguna" title="Editatu" style="float:right;"><i class="icon-edit"></i></button>
                                         <p>
                                             <a data-bind="text: dataString, click: $root.hautatuEguna"></a>

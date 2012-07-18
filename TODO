@@ -4,8 +4,8 @@
 * Tests [in process]
 * Test event sorting [eginda]
 * User a different storage key for each festival [eginda]
-* Add Wysigwg to detail textareas
-* Highlight the day being edited
+* Add Wysigwg to detail textareas [eginda]
+* Highlight the day being edited [eginda]
 * Highlight the current day in the app
 * Validate (use knockout)
 
