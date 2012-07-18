@@ -15,6 +15,7 @@
         <script type='text/javascript' src="assets/js/bootstrap-datepicker.eu.js"></script>
         <script type="text/javascript" src="assets/jhtmlarea/js/jHtmlArea-0.7.0.js"></script>
         <script type='text/javascript' src='../app/assets/js/knockout-2.0.0.js'></script>
+        <script type='text/javascript' src='assets/js/knockout.validation.js'></script>
         <script type='text/javascript' src='../app/assets/js/data.js'></script>
         <script type='text/javascript' src='../app/assets/js/model.js'></script>
         <script type='text/javascript' src='src/js/model.js'></script>
@@ -189,7 +190,7 @@
                                             <label>Xehetasunak</label>
                                             <textarea class="span12 longTextArea" placeholder="Xehetasun gehiago badago idatzi hemen" data-bind="htmlarea: xehetasunak"></textarea>
                                             <div class="btn-group">
-                                                <a class="btn" title="Ados" data-bind="click: $root.berrezarriEditatzekoak"><i class="icon-ok"></i></a>
+                                                <button class="btn" data-bind="click: $root.berrezarriEditatzekoak, enable: $data.isValid()" title="Ados"><i class="icon-ok"></i></button>
                                                 <a class="btn" title="Ezabatu" data-toggle="modal" href="#deialdiaEzabatuModal"><i class="icon-trash"></i></a>
                                             </div>
                                         </form>

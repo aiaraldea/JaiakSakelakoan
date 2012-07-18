@@ -49,37 +49,37 @@ test("Deialdien ordena", function() {
     var eguna = jaia.egunak()[0];
     eguna.sort();
     
-    equal(eguna.deialdiak()[0].id, 1, "8 - Lehehenengo deialdia");
-    equal(eguna.deialdiak()[1].id, 2, "8 - Lehehenengo deialdia");
-    equal(eguna.deialdiak()[5].id, 6, "8 - Lehehenengo deialdia");
+    equal(eguna.deialdiak()[0]().id, 1, "8 - Lehehenengo deialdia");
+    equal(eguna.deialdiak()[1]().id, 2, "8 - Lehehenengo deialdia");
+    equal(eguna.deialdiak()[5]().id, 6, "8 - Lehehenengo deialdia");
     
     eguna.hasieraOrdua(0);
-    equal(eguna.deialdiak()[0].id, 5, "0 - Lehehenengo deialdia");
-    equal(eguna.deialdiak()[1].id, 6, "0 - Lehehenengo deialdia");
-    equal(eguna.deialdiak()[5].id, 4, "0 - Lehehenengo deialdia");
+    equal(eguna.deialdiak()[0]().id, 5, "0 - Lehehenengo deialdia");
+    equal(eguna.deialdiak()[1]().id, 6, "0 - Lehehenengo deialdia");
+    equal(eguna.deialdiak()[5]().id, 4, "0 - Lehehenengo deialdia");
     
     eguna.hasieraOrdua(1);
-    equal(eguna.deialdiak()[0].id, 6, "1 - Lehehenengo deialdia");
-    equal(eguna.deialdiak()[1].id, 1, "1 - Lehehenengo deialdia");
-    equal(eguna.deialdiak()[5].id, 5, "1 - Lehehenengo deialdia");
+    equal(eguna.deialdiak()[0]().id, 6, "1 - Lehehenengo deialdia");
+    equal(eguna.deialdiak()[1]().id, 1, "1 - Lehehenengo deialdia");
+    equal(eguna.deialdiak()[5]().id, 5, "1 - Lehehenengo deialdia");
     
     eguna.hasieraOrdua(0);
-    equal(eguna.deialdiak()[0].id, 5, "0 - Lehehenengo deialdia");
-    equal(eguna.deialdiak()[1].id, 6, "0 - Lehehenengo deialdia");
-    equal(eguna.deialdiak()[5].id, 4, "0 - Lehehenengo deialdia");
+    equal(eguna.deialdiak()[0]().id, 5, "0 - Lehehenengo deialdia");
+    equal(eguna.deialdiak()[1]().id, 6, "0 - Lehehenengo deialdia");
+    equal(eguna.deialdiak()[5]().id, 4, "0 - Lehehenengo deialdia");
     
     eguna.hasieraOrdua(2);
-    equal(eguna.deialdiak()[0].id, 6, "2 - Lehehenengo deialdia");
-    equal(eguna.deialdiak()[1].id, 1, "2 - Lehehenengo deialdia");
-    equal(eguna.deialdiak()[5].id, 5, "2 - Lehehenengo deialdia");
+    equal(eguna.deialdiak()[0]().id, 6, "2 - Lehehenengo deialdia");
+    equal(eguna.deialdiak()[1]().id, 1, "2 - Lehehenengo deialdia");
+    equal(eguna.deialdiak()[5]().id, 5, "2 - Lehehenengo deialdia");
     
     eguna.hasieraOrdua(3);
-    equal(eguna.deialdiak()[0].id, 1, "3 - Lehehenengo deialdia");
-    equal(eguna.deialdiak()[1].id, 2, "3 - Lehehenengo deialdia");
-    equal(eguna.deialdiak()[5].id, 6, "3 - Lehehenengo deialdia");
+    equal(eguna.deialdiak()[0]().id, 1, "3 - Lehehenengo deialdia");
+    equal(eguna.deialdiak()[1]().id, 2, "3 - Lehehenengo deialdia");
+    equal(eguna.deialdiak()[5]().id, 6, "3 - Lehehenengo deialdia");
     
     eguna.hasieraOrdua(2);
-    equal(eguna.deialdiak()[0].id, 6, "2 - Lehehenengo deialdia");
-    equal(eguna.deialdiak()[1].id, 1, "2 - Lehehenengo deialdia");
-    equal(eguna.deialdiak()[5].id, 5, "2 - Lehehenengo deialdia");
+    equal(eguna.deialdiak()[0]().id, 6, "2 - Lehehenengo deialdia");
+    equal(eguna.deialdiak()[1]().id, 1, "2 - Lehehenengo deialdia");
+    equal(eguna.deialdiak()[5]().id, 5, "2 - Lehehenengo deialdia");
 });

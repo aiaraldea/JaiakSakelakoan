@@ -44,27 +44,17 @@ function Eguna(id) {
     self.klonatuDeialdia = function(deialdia) {
         var deialdiBerria = new Deialdi(deialdia.id);
         deialdiBerria.eguna = self;
-        if (typeof deialdia.ordua === 'function') {
-            deialdiBerria.ordua(deialdia.ordua());
-        } else {
-            deialdiBerria.ordua(deialdia.ordua);
-        }
-        if (typeof deialdia.izenburua === 'function') {
-            deialdiBerria.izenburua(deialdia.izenburua());
-        } else {
-            deialdiBerria.izenburua(deialdia.izenburua);
-        }
-        if (typeof deialdia.xehetasunak === 'function') {
-            deialdiBerria.xehetasunak = deialdia.xehetasunak;
-        } else {
-            deialdiBerria.xehetasunak(deialdia.xehetasunak);
-        }
+        deialdiBerria.ordua(ko.utils.unwrapObservable(deialdia.ordua));
+        deialdiBerria.izenburua(ko.utils.unwrapObservable(deialdia.izenburua));
+        deialdiBerria.xehetasunak(ko.utils.unwrapObservable(deialdia.xehetasunak));
         
         return deialdiBerria;
     };
     
     self.sort = function () {
         self.deialdiak.sort(function (left, right) {
+            var left = ko.utils.unwrapObservable(left);
+            var right = ko.utils.unwrapObservable(right);
             if (left.ordua() === right.ordua()) {
                 return 0;
             }
@@ -114,7 +104,14 @@ function Deialdi(id) {
         id = Deialdi.counter++;
     }
     self.id = id;
-    self.ordua = ko.observable();
+    self.ordua = ko.observable().extend({ 
+                    required: true,
+                    minLength: 5,
+                     pattern: {
+                          message: 'Orduaren patroia ondo bete',
+                          params: '^([0-1][0-9]|2[0-3]):([0-5][0-9])(-([0-1][0-9]|2[0-3]):([0-5][0-9]))?$'
+                     }
+                });
     self.izenburua = ko.observable();
     self.xehetasunak = ko.observable();
     // erlazioak
@@ -147,25 +144,13 @@ function Jaia() {
         var i, deialdia;
         var egunBerria = new Eguna(eguna.id);
         egunBerria.jaia = self;
-        if (typeof eguna.data === 'function') {
-            egunBerria.data(eguna.data());
-        } else {
-            egunBerria.data(eguna.data);
-        }
-        if (typeof eguna.izena === 'function') {
-            egunBerria.izena(eguna.izena());
-        } else {
-            egunBerria.izena(eguna.izena);
-        }
-        var deialdiak;
-        if (typeof eguna.deialdiak === 'function') {
-            deialdiak = eguna.deialdiak();
-        } else {
-            deialdiak = eguna.deialdiak;
-        }
+        egunBerria.data(ko.utils.unwrapObservable(eguna.data));
+        egunBerria.izena(ko.utils.unwrapObservable(eguna.izena));
+        var deialdiak = ko.utils.unwrapObservable(eguna.deialdiak);
         
         for (i = 0; i < deialdiak.length; i++) {
-            deialdia = egunBerria.klonatuDeialdia(deialdiak[i]);
+            deialdia = ko.validatedObservable(egunBerria.klonatuDeialdia(deialdiak[i]));
+            console.log(deialdia().id);
             egunBerria.deialdiak.push(deialdia);
         }        
         

@@ -48,8 +48,8 @@ test( "Kudeaketaren datuen inportazioa", function() {
     equal(jaia.egunak()[0].jaia, jaia, "Egunaren jaiarekiko lotura");
     equal(jaia.egunak()[0].deialdiak().length, 1, "Lehenengo egunean deialdi bat dago");
     equal(jaia.egunak()[1].deialdiak().length, 2, "Bigarren egunean deialdi bi dago");
-    equal(jaia.egunak()[0].deialdiak()[0].id, 0, "Lehenengo deialdiaren IDa");
-    equal(jaia.egunak()[0].deialdiak()[0].ordua(), "18:00", "Lehenengo deialdiaren ordua");
+    equal(jaia.egunak()[0].deialdiak()[0]().id, 0, "Lehenengo deialdiaren IDa");
+    equal(jaia.egunak()[0].deialdiak()[0]().ordua(), "18:00", "Lehenengo deialdiaren ordua");
 });
 
 test("Kudeaketaren datuen esportazioa", function() {

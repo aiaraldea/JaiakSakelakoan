@@ -8,5 +8,6 @@
 * Highlight the day being edited [eginda]
 * Highlight the current day in the app
 * Validate (use knockout)
+* Simplify imports with ko.utils
 
 * Multiple festivals
