@@ -12,3 +12,10 @@
 #eguna table {
     width: 100%;
 }
+
+.smallTextArea {
+  height: 3em;
+}
+.longTextArea {
+  height: 9em;
+}

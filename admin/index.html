@@ -8,10 +8,12 @@
         <link rel="stylesheet" href="src/css/style.css" />
         <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
         <link rel="stylesheet" href="assets/css/datepicker.css" />
+        <link rel="stylesheet" type="text/css" href="assets/jhtmlarea/css/jHtmlArea.css" />
         <script type='text/javascript' src="../app/assets/js/jquery-1.7.2.min.js"></script>
         <script type='text/javascript' src="assets/js/bootstrap.min.js"></script>
         <script type='text/javascript' src="assets/js/bootstrap-datepicker.js"></script>
         <script type='text/javascript' src="assets/js/bootstrap-datepicker.eu.js"></script>
+        <script type="text/javascript" src="assets/jhtmlarea/js/jHtmlArea-0.7.0.js"></script>
         <script type='text/javascript' src='../app/assets/js/knockout-2.0.0.js'></script>
         <script type='text/javascript' src='../app/assets/js/data.js'></script>
         <script type='text/javascript' src='../app/assets/js/model.js'></script>
@@ -60,17 +62,17 @@
                         <dt>Azalaren irudia eta ikonoa:</dt>
                         <dd data-bind="text: kartelarenEgilea">Yolanda Remire de Ganuza</dd>
                         <dt>Xehetasunak:</dt>
-                        <dd data-bind="text: xehetasunak">Xehetasunak</dd>
+                        <dd data-bind="html: xehetasunak">Xehetasunak</dd>
                     </dl>
                 </div><!-- /content -->
-                <div data-bind="visible: $root.editatzekoJaia">
+                <div data-bind="if: $root.editatzekoJaia">
                     <form class="well">
                         <label>Jaia</label>
                         <input type="text" class="span12" placeholder="data" data-bind="value: izena" required="required">
                         <label>Azalaren irudia eta ikonoa</label>
                         <input type="text" class="span12" placeholder="izena" data-bind="value: kartelarenEgilea">
                         <label>Xehetasunak</label>
-                        <textarea class="span12" placeholder="Idatzi hemen jaien gaineko informazio gehiago" data-bind="value: xehetasunak"></textarea>
+                        <textarea id="jaia_xh" class="span12 longTextArea" placeholder="Idatzi hemen jaien gaineko informazio gehiago" data-bind="htmlarea: xehetasunak"></textarea>
                         <div class="btn-group">
                             <a class="btn" title="Ados" data-bind="click: $root.berrezarriEditatzekoak"><i class="icon-ok"></i></a>
                         </div>
@@ -85,7 +87,7 @@
                         <h2>Eguna gehitu
                             <a class="btn" title="Editatu" data-bind="click: $root.toggleEgunaGehitu" style="float:right;"><i class="icon-plus"></i></a>
                         </h2>
-                        <div data-bind="visible: $root.egunaGehitu">
+                        <div data-bind="if: $root.egunaGehitu">
                             <form class="well" data-bind="with: $root.egunBerria">
                                 <label>Data</label>
                                 <div class="input-append date datepicker" data-bind="datePicker: data">
@@ -107,14 +109,14 @@
                             <tr>
                                 <td>
                                     <div style="min-height: 36px;" data-bind="visible: !$root.egunaEditagarriaDa(id)">
-                                        <a class="btn" title="Editatu" data-bind="click: $root.ezarriEditatzekoEguna" style="float:right;"><i class="icon-edit"></i></a>
+                                        <button class="btn" data-bind="click: $root.ezarriEditatzekoEguna" title="Editatu" style="float:right;"><i class="icon-edit"></i></button>
                                         <p>
                                             <a data-bind="text: dataString, click: $root.hautatuEguna"></a>
                                             <span data-bind="text: izena"></span>
                                         </p>
 
                                     </div>
-                                    <div data-bind="visible: $root.egunaEditagarriaDa(id)">
+                                    <div data-bind="if: $root.egunaEditagarriaDa(id)">
                                         <h6 data-bind="text: dataString"></h6>
                                         <form class="well">
                                             <label>Data</label>
@@ -127,7 +129,7 @@
                                             <input type="text" class="span12" placeholder="izena" data-bind="value: izena">
                                             <span class="help-block">Egunaren izena, adib. "Umeen eguna".</span>
                                             <div class="btn-group">
-                                                <a class="btn" title="Ados" data-bind="click: $root.berrezarriEditatzekoak"><i class="icon-ok"></i></a>
+                                                <button class="btn" data-bind="click: $root.berrezarriEditatzekoak" title="Ados"><i class="icon-ok"></i></button>
                                                 <a class="btn" title="Ezabatu" data-toggle="modal" href="#egunaEzabatuModal"><i class="icon-trash"></i></a>
                                             </div>
                                         </form>
@@ -151,14 +153,14 @@
                         <h2>Deialdia gehitu
                             <a class="btn" title="Gehitu" data-bind="click: $root.toggleDeialdiaGehitu" style="float:right;"><i class="icon-plus"></i></a>
                         </h2>
-                        <div data-bind="visible: $root.deialdiaGehitu">
+                        <div data-bind="if: $root.deialdiaGehitu">
                             <form class="well" data-bind="with: $root.deialdiBerria">
                                 <label>Data</label>
                                 <input type="text" class="span2" placeholder="00:00" data-bind="value: ordua" required="required"  pattern="\d{1,2}/\d{1,2}/\d{4}">
                                 <label>Izenburua</label>
-                                <input type="text" class="span12" placeholder="Idatzi hemen deialdiaren deskribapen laburra" data-bind="value: izenburua">
+                                <textarea class="span12 smallTextArea" placeholder="Idatzi hemen deialdiaren deskribapen laburra" data-bind="htmlareaLight: izenburua" required="required"></textarea>
                                 <label>Xehetasunak</label>
-                                <textarea class="span12" placeholder="Xehetasun gehiago badago idatzi hemen" data-bind="value: xehetasunak"></textarea>
+                                <textarea class="span12 longTextArea" placeholder="Xehetasun gehiago badago idatzi hemen" data-bind="htmlarea: xehetasunak"></textarea>
                                 <div class="btn-group">
                                     <a class="btn" title="Ados" data-bind="click: $root.gehituDeialdia"><i class="icon-ok"></i>Gehitu</a>
                                     <a class="btn" title="Utzi" data-bind="click: $root.berrezarriEditatzekoak"><i class="icon-remove"></i>Utzi</a>
@@ -175,16 +177,17 @@
                                         <p data-bind="html: izenburua" ></p>
                                         <p data-bind="html: xehetasunak" ></p>
                                     </div>
-                                    <div data-bind="visible: ($root.deialdiaEditagarriaDa(id))">
+                                    <div data-bind="if: ($root.deialdiaEditagarriaDa(id))">
                                         <h6><span data-bind="text: ordua"></span> - <span data-bind="text: izenburua"></span></h6>
                                         <form class="well">
                                             <label>Id</label><span data-bind="text: id"></span>
                                             <label>Ordua</label>
                                             <input type="text" class="span2" placeholder="00:00" data-bind="value: ordua" required="required">
                                             <label>Izenburua</label>
-                                            <input type="text" class="span12" placeholder="Idatzi hemen deialdiaren deskribapen laburra" data-bind="value: izenburua" required="required">
+                                            <textarea class="span12 smallTextArea" placeholder="Idatzi hemen deialdiaren deskribapen laburra" data-bind="htmlareaLight: izenburua" required="required"></textarea>
+                                            
                                             <label>Xehetasunak</label>
-                                            <textarea class="span12" placeholder="Xehetasun gehiago badago idatzi hemen" data-bind="value: xehetasunak"></textarea>
+                                            <textarea class="span12 longTextArea" placeholder="Xehetasun gehiago badago idatzi hemen" data-bind="htmlarea: xehetasunak"></textarea>
                                             <div class="btn-group">
                                                 <a class="btn" title="Ados" data-bind="click: $root.berrezarriEditatzekoak"><i class="icon-ok"></i></a>
                                                 <a class="btn" title="Ezabatu" data-toggle="modal" href="#deialdiaEzabatuModal"><i class="icon-trash"></i></a>

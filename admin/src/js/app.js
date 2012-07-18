@@ -77,7 +77,7 @@ function App() {
         self.deialdiaGehitu(false);
         self.egunaGehitu(false);
         self.jaia().sort();
-        if(self.hautatutakoEguna() !== null) {
+        if(self.hautatutakoEguna() != null) {
             self.hautatutakoEguna().sort();
         }
     };
@@ -174,6 +174,56 @@ ko.bindingHandlers.datePicker = {
         var value = valueAccessor();
         var data = ko.utils.unwrapObservable(value);
         $(element).find('input').val(data);
+    }
+};
+
+ko.bindingHandlers.htmlarea = {
+    init: function(element, valueAccessor, allBindingsAccessor, viewModel) {
+        var value = valueAccessor();
+        $(element).htmlarea({
+            toolbar: [
+                    ["bold", "italic"],
+                    ["unorderedList", "orderedList"],
+                    ["h3", "h4", "h5", "p"],
+                    ["html"]
+                ],
+            css: "assets/jhtmlarea/css/jHtmlArea.Editor.css"
+            });
+            console.log($(element));
+        $(element).change(function() {
+            value($(element).val());
+        });
+    },
+    update: function(element, valueAccessor, allBindingsAccessor, viewModel) {
+        var value = valueAccessor();
+        var data = ko.utils.unwrapObservable(value);
+        if (data != $(element).val()) {
+            $(element).val(data);
+            $(element).htmlarea('updateHtmlArea');
+        }
+    }
+};
+ko.bindingHandlers.htmlareaLight = {
+    init: function(element, valueAccessor, allBindingsAccessor, viewModel) {
+        var value = valueAccessor();
+        $(element).htmlarea({
+            toolbar: [
+                    ["bold", "italic"],
+                    ["html"]
+                ],
+            css: "assets/jhtmlarea/css/jHtmlArea.Editor.css"
+            });
+        $(element).change(function() {
+            value($(element).val());
+        });
+    },
+    update: function(element, valueAccessor, allBindingsAccessor, viewModel) {
+        var value = valueAccessor();
+        var data = ko.utils.unwrapObservable(value);
+        if (data != $(element).val()) {
+            $(element).val(data);
+            $(element).htmlarea('updateHtmlArea');
+        }
     }
 };
 
