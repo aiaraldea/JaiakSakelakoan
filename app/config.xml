@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget xmlns		= "http://www.w3.org/ns/widgets"
 	xmlns:gap	= "http://phonegap.com/ns/1.0"
-	id		= "com.aiaraldea.jaiak.urduna"
-	version 	= "1.0.3"
-        versionCode     = "3">
+	id		= "com.aiaraldea.jaiak"
+	version 	= "1.0.4"
+        versionCode     = "66">
 
-    <name>Urduñako jaiak</name>
+    <name>Amurrioko jaiak</name>
 
     <description>
-            Urduñako jaien egitaraua zure sakelako telefonoan
+            Amurrioko jaien egitaraua zure sakelako telefonoan
     </description>
 
     <author href="http://www.aiaraldea.com"
@@ -22,9 +22,9 @@
         <gap:platform name="symbian.wrt" />
         <gap:platform name="blackberry" project="widgets"/>
     </gap:platforms>
-
-    <icon src="assets/icon.png" gap:role="default" />
-    <gap:splash src="assets/splash.jpg" />
+    
+    <icon src="icon.png" />
+    <gap:splash src="splash.png" />
 
 <!--	<feature name="http://api.phonegap.com/1.0/geolocation"/>-->
     <feature name="http://api.phonegap.com/1.0/network"/>

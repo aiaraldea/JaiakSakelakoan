@@ -121,16 +121,10 @@ function AppJaia() {
     };
     //
     self.findDeialdiById = function (deialdiId) {
-                console.log(typeof deialdiId);
-                console.log(deialdiId);
-                console.log("--");
         var i, eguna, deialdia;
         for (i = 0; i < self.egunak().length; i++) {
             eguna = self.egunak()[i];
             deialdia = ko.utils.arrayFirst(eguna.deialdiak(), function (item) {
-                console.log(typeof item.id);
-                console.log(item.id);
-                console.log(item.id === deialdiId);
                 return deialdiId === item.id;
             });
             if (deialdia !== undefined && deialdia !== null) {
@@ -251,7 +245,6 @@ AppJaia.loadObjectFromStorage = function() {
 };
 
 AppJaia.saveToStorage = function (data, name) {
-    console.log(name);
     var itemName;
     if (name != null && name.length > 0) {
         itemName = "jaia-"+name;
@@ -259,7 +252,11 @@ AppJaia.saveToStorage = function (data, name) {
         itemName = "jaia";
     }
     var jaiakString = window.localStorage.getItem("jaia.list");
-    var jaienDatak = JSON.parse(jaiakString)||{};
+    if (typeof jaiakString !== "undefined" && jaiakString!=null){
+      jaienDatak = JSON.parse(jaiakString);
+    } else {
+      jaienDatak = {};
+    }
     jaienDatak[itemName] = new Date().getTime();
     jaiakString = JSON.stringify(jaienDatak);
     window.localStorage.setItem("jaia.list", jaiakString);
@@ -291,9 +288,24 @@ AppJaia.loadFromData = function (data) {
 };
 
 AppJaia.init = function() {
-    var savedDate = window.localStorage.getItem("data-date");
-    var origData = 1335994581394;
-    if (savedDate < origData) {
+    var jaiakString = window.localStorage.getItem("jaia.list");
+    var jaienDatak;
+    if (typeof jaiakString !== "undefined" && jaiakString!=null) {
+      jaienDatak = JSON.parse(jaiakString);
+    } else {
+      jaienDatak = {};
+    }
+    var last;
+    // momentuz azkena erabiliko dut, geroago aplikazio anitz kudeatzeko gaitasuna
+    // gehitu nahi dut.
+    for (var name in jaienDatak) {
+      if (jaienDatak.hasOwnProperty(name)) {
+      }
+      last = name;
+    }
+    var savedDate = jaienDatak[name];
+    var origData = 1344447563698;
+    if (savedDate == null || savedDate < origData) {
         var j = AppJaia.loadFromFile();
         j.save();
     }
