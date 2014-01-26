@@ -1,0 +1,193 @@
+<style type="text/css">
+    form input.ng-invalid.ng-dirty {
+        background-color: #FA787E;
+    }
+
+    .ta-editor {
+        min-height: 100px;
+        height: auto;
+        overflow: auto;
+        font-family: inherit;
+        font-size: 100%;
+    }
+</style>
+<nav class="navbar navbar-default" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+        <a class="navbar-brand" href="#">Aiaraldeko Jaiak</a>
+        <ul class="nav navbar-nav">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Ekintzak <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a ng-click="reload()">Birkargatu</a></li>
+                    <li><a ng-click="export()">Gorde</a></li>
+                </ul>
+            </li>
+        </ul>
+
+    </div>
+</nav>
+<div class="container" ng-show="!loaded"><h1>Kargatzen...</h1></div>
+<div class="container" ng-show="loaded">
+    <div class="row">
+        <div class="col-md-4">
+            <h4>Jaiak
+                <button type="submit" class="btn btn-primary btn-xs" ng-click="new ()" ng-show="inEdition == null">Gehitu</button></h4>
+            <div ng-show="inEdition == null">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr ng-repeat="festival in festivals">
+                            <td ng-click="select($index)">{{festival.name}} {{festival.edition}}</td> 
+                            <td>
+                                <button ng-click="edit($index)" class="btn btn-default">Edit</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div ng-controller="FestivalEditionCtrl" ng-show="inEdition != null">
+                <h2>{{inEdition.name}}</h2>
+                <form role="form" ng-submit="save()" novalidate name="form">
+                    <div class="form-group">
+                        <label for="festivalName">Name</label>
+                        <input id="festivalName" name="festivalName" class="form-control" type="text" ng-model="inEdition.name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="festivalName">Edizioa</label>
+                        <input id="festivalEdition" name="festivalEdition" class="form-control" type="text" ng-model="inEdition.edition" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="festivalBegin">Hasiera data</label>
+                        <input type="text" class="form-control" 
+                               id="festivalBegin" 
+                               name="festivalBegin" 
+                               datepicker-popup="yyyy-MM-dd" 
+                               date-converter 
+                               ng-model="inEdition.begin" 
+                               min="'2013-06-22'" 
+                               max="'2015-06-22'"  
+                               ng-required="true"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="festivalEnd">Bukaera data</label>
+                        <input type="text" 
+                               id="festivalEnd" 
+                               name="festivalEnd" 
+                               class="form-control" 
+                               datepicker-popup="yyyy-MM-dd" 
+                               ng-model="inEdition.end" 
+                               is-open="opened" 
+                               min="'2013-06-22'" 
+                               max="'2015-06-22'"  
+                               ng-required="true"
+                               date-converter/>
+                    </div>
+                    <div class="form-group">
+                        <label for="festivalEnd">Xehetasunak</label>
+                        <div text-angular ta-toolbar="[['bold','italics'],['h1','h2','h3']]" ng-model="inEdition.description"></div>
+                    </div>
+                    <button type="reset" class="btn btn-default" ng-click="reset()">Utzi</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="form.$invalid">Gorde</button>
+                    <a class="btn btn-danger btn-sm" ng-click="confirmDelete(inEditionIndex)">Ezabatu</a>
+                </form>
+            </div>
+        </div>
+
+        <div ng-controller="FestivalSelectedCtrl" ng-show="selectedFestivalContext != null" class="col-md-4">
+            <div>
+                <h4>{{selectedFestivalContext.festival.name}}
+                    <span class="minor">{{selectedFestivalContext.festival.begin}}</span>
+                    <span class="minor">{{selectedFestivalContext.festival.end}}</span>
+                    <button ng-click="new()" class="btn btn-default btn-xs" ng-show="selectedFestivalContext.inEdition == null">Gehitu</button>
+                </h4>
+            </div>
+            <div ng-show="selectedFestivalContext.inEdition == null">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr ng-repeat="day in selectedFestivalContext.festival.days">
+                            <td ng-click="select($index)">{{day.date}} <span ng-show="day.name != null" class="minor">{{day.name}}</span></td> 
+                            <td>
+                                <button ng-click="edit($index)" class="btn btn-default">Edit</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <form role="form" ng-show="selectedFestivalContext.inEdition != null" ng-submit="save()" novalidate>
+                <div class="form-group">
+                    <label for="dayDate">Data</label>
+                    <input type="text" 
+                           id="dayDate" 
+                           name="dayDate" 
+                           class="form-control" 
+                           datepicker-popup="yyyy-MM-dd" 
+                           ng-model="selectedFestivalContext.inEdition.date" 
+                           is-open="opened" 
+                           min="'2013-06-22'" 
+                           max="'2015-06-22'"  
+                           ng-required="true"
+                           date-converter />
+                </div>
+                <div class="form-group">
+                    <label for="dayName">Deskipzioa</label>
+                    <input id="dayName" name="dayName" class="form-control" type="text" ng-model="selectedFestivalContext.inEdition.name">
+                </div>
+
+                <div class="form-group">
+                    <label for="festivalEnd">Xehetasunak</label>
+                    <div text-angular ta-toolbar="[['bold','italics'],['h1','h2','h3']]" ng-model="selectedFestivalContext.inEdition.description"></div>
+                </div>
+
+                <button type="reset" class="btn btn-default" ng-click="reset()">Utzi</button>
+                <button type="submit" class="btn btn-primary" ng-disabled="form.$invalid">Gorde</button>
+            </form>
+        </div>
+
+
+        <div ng-controller="DaySelectedCtrl" ng-show="selectedFestivalContext.selectedDay != null" class="col-md-4">
+            <div>
+                <h4>{{selectedFestivalContext.selectedDay.date}}
+                    <span class="minor">{{selectedFestivalContext.selectedDay.name}}</span>
+                    <button type="submit" class="btn btn-primary btn-xs" ng-click="new ()" ng-show="selectedFestivalContext.eventInEdition == null">Gehitu</button>
+                </h4>
+            </div>
+            <div  ng-show="selectedFestivalContext.eventInEdition == null">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr ng-repeat="event in selectedFestivalContext.selectedDay.events">
+                            <td>{{event.time}}<span ng-show="event.name != null">({{event.name}})</span></td> 
+                            <td>
+                                <button ng-click="edit($index)" class="btn btn-default">Edit</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <form role="form" ng-show="selectedFestivalContext.eventInEdition != null" ng-submit="save()" novalidate>
+                <div class="form-group">
+                    <label for="eventTime">Ordua</label>
+                    <input type="text" 
+                           id="eventTime" 
+                           name="dayDate" 
+                           class="form-control" 
+                           ng-model="selectedFestivalContext.eventInEdition.time"   
+                           ng-required="true"
+                           />
+                </div>
+                <div class="form-group">
+                    <label for="dayName">Deskipzioa</label>
+                    <input id="dayName" name="dayName" class="form-control" type="text" ng-model="selectedFestivalContext.eventInEdition.name">
+                </div>
+
+                <div class="form-group">
+                    <label for="festivalEnd">Xehetasunak</label>
+                    <div text-angular ta-toolbar="[['bold','italics'],['h1','h2','h3']]" ng-model="selectedFestivalContext.eventInEdition.description"></div>
+                </div>
+
+                <button type="reset" class="btn btn-default" ng-click="reset()">Utzi</button>
+                <button type="submit" class="btn btn-primary" ng-disabled="form.$invalid">Gorde</button>
+            </form>
+        </div>
+    </div>
+</div>
