@@ -1,0 +1,78 @@
+<style type="text/css">
+    form input.ng-invalid.ng-dirty {
+        background-color: #FA787E;
+    }
+
+    .ta-editor {
+        min-height: 100px;
+        height: auto;
+        overflow: auto;
+        font-family: inherit;
+        font-size: 100%;
+    }
+</style>
+<nav class="navbar navbar-default" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+        <a class="navbar-brand" href="#">Aiaraldeko Jaiak</a>
+    </div>
+<!--    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-right">
+            <li><a ng-click="back()" ng-show="selectedFestivalContext != null">Atzera</a></li>
+        </ul>
+    </div>-->
+<p class="navbar-text navbar-right"><a ng-click="back()" ng-show="selectedFestivalContext != null" class="navbar-link btn btn-default">Atzera</a></p>
+</nav>
+<div class="container" ng-show="!loaded"><h1>Kargatzen...</h1></div>
+<div class="container" ng-show="loaded">
+    <div class="row">
+        <div class="{{styleClass()}}">
+            <h4>Jaiak</h4>
+            <div>
+                <table class="table table-striped">
+                    <tbody>
+                        <tr ng-repeat="festival in festivals">
+                            <td ng-click="select($index)">{{festival.name}} {{festival.edition}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div ng-controller="FestivalSelectedCtrl" ng-show="selectedFestivalContext != null" class="{{styleClass()}}">
+            <div>
+                <h4>{{selectedFestivalContext.festival.name}}
+                    <span class="minor">{{selectedFestivalContext.festival.begin}}</span>
+                    <span class="minor">{{selectedFestivalContext.festival.end}}</span>
+                </h4>
+            </div>
+            <div>
+                <table class="table table-striped">
+                    <tbody>
+                        <tr ng-repeat="day in selectedFestivalContext.festival.days">
+                            <td ng-click="select($index)">{{day.date}} <span ng-show="day.name != null" class="minor">{{day.name}}</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div ng-controller="DaySelectedCtrl" ng-show="selectedFestivalContext.selectedDay != null" class="col-md-4 col-sm-6">
+            <div>
+                <h4>{{selectedFestivalContext.selectedDay.date}}
+                    <span class="minor">{{selectedFestivalContext.selectedDay.name}}</span>
+                </h4>
+            </div>
+            <div>
+                <table class="table table-striped">
+                    <tbody>
+                        <tr ng-repeat="event in selectedFestivalContext.selectedDay.events">
+                            <td>{{event.time}}<span ng-show="event.name != null">({{event.name}})</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

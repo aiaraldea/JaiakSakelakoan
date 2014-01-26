@@ -1,0 +1,11 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="cancel()">&times;</button>
+    <h4 class="modal-title">Ezabatu</h4>
+</div>
+<div class="modal-body">{{itemToDelete}}
+    Benetan ezabatu nahi duzu?
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="cancel()">Utzi</button>
+    <button type="button" class="btn btn-danger" ng-click="delete(itemToDelete)">Ezabatu</button>
+</div>
