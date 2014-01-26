@@ -11,11 +11,14 @@ function AppEguna(id) {
     self.data = ko.observable(); // Zergatik observable??
     
     self.dataString = ko.computed(function () {
-        var d = new Date(self.data());
+      if (typeof self.data() !== "undefined"){
+        var d = new Date(self.data().replace(/\-/g, '/'));
         var m = AppEguna.prototype.months[d.getMonth()];
         var dd = d.getDate();
         var dw = AppEguna.prototype.days[d.getDay()];
         return "" + m + "k "+ dd + ", " + dw;
+      }
+      return "datarik ez";
     });
     self.izena = ""; // Zergatik observable??
     self.deialdiak = ko.observableArray();
@@ -245,7 +248,7 @@ AppJaia.loadObjectFromStorage = function() {
 };
 
 AppJaia.saveToStorage = function (data, name) {
-    var itemName;
+    var itemName, jaienDatak;
     if (name != null && name.length > 0) {
         itemName = "jaia-"+name;
     } else {
