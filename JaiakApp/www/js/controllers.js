@@ -39,12 +39,17 @@ angular.module('com.aiaraldea.jaiak.controllers', ['com.aiaraldea.jaiak.services
               if ($scope.selectedFestivalContext != null && $scope.selectedFestivalContext.selectedDay != null) {
                 clazz = clazz + ' hidden-sm';
               }
-              clazz = clazz + ' col-md-4 col-sm-6';
+              if ($scope.selectedFestivalContext != null && $scope.selectedFestivalContext.selectedEvent != null) {
+                clazz = clazz + ' hidden-md';
+              }
+              clazz = clazz + ' col-lg-3 col-md-4 col-sm-6';
               return clazz;
             };
             $scope.back = function() {
               if ($scope.selectedFestivalContext != null) {
-                if ($scope.selectedFestivalContext.selectedDay != null) {
+                if ($scope.selectedFestivalContext.selectedEvent != null) {
+                  $scope.selectedFestivalContext.selectedEvent = null;
+                } else if ($scope.selectedFestivalContext.selectedDay != null) {
                   $scope.selectedFestivalContext.selectedDay = null;
                 } else {
                   $scope.selectedFestivalContext = null;
@@ -65,11 +70,26 @@ angular.module('com.aiaraldea.jaiak.controllers', ['com.aiaraldea.jaiak.services
               if ($scope.selectedFestivalContext != null && $scope.selectedFestivalContext.selectedDay != null) {
                 clazz = clazz + ' hidden-xs';
               }
-              clazz = clazz + ' col-md-4 col-sm-6';
+              if ($scope.selectedFestivalContext != null && $scope.selectedFestivalContext.selectedEvent != null) {
+                clazz = clazz + ' hidden-sm';
+              }
+              clazz = clazz + ' col-lg-3 col-md-4 col-sm-6';
               return clazz;
             };
           }]).
         controller('DaySelectedCtrl', ['$scope', '$filter', function($scope, $filter) {
             $scope.reset = function() {
+            };
+            $scope.select = function(index) {
+              $scope.reset();
+              $scope.selectedFestivalContext.selectedEvent = $scope.selectedFestivalContext.selectedDay.events[index];
+            };
+            $scope.styleClass = function() {
+              var clazz = '';
+              if ($scope.selectedFestivalContext != null && $scope.selectedFestivalContext.selectedEvent != null) {
+                clazz = clazz + ' hidden-xs';
+              }
+              clazz = clazz + ' col-lg-3 col-md-4 col-sm-6';
+              return clazz;
             };
           }]);

@@ -64,17 +64,30 @@
         </div>
 
 
-        <div ng-controller="DaySelectedCtrl" ng-show="selectedFestivalContext.selectedDay != null" class="col-md-4 col-sm-6">
+        <div ng-controller="DaySelectedCtrl" ng-show="selectedFestivalContext.selectedDay != null" class="col-lg-3 col-md-4 col-sm-6">
             <div class="panel panel-default">
                 <div class="panel-heading">{{selectedFestivalContext.selectedDay.date}}
                     <span class="minor">{{selectedFestivalContext.selectedDay.name}}</span>
                 </div>
                 <ul class="list-group">
                     <li ng-repeat="event in selectedFestivalContext.selectedDay.events"
-                        class='list-group-item'>
+                        ng-click="select($index)"
+                        class='list-group-item'
+                        ng-class="{active: selectedFestivalContext.selectedEvent == event}">
                         <strong>{{event.time}}</strong> <span ng-bind="event.name"></span>
                     </li>
                 </ul>
+            </div>
+        </div>
+        <div ng-controller="DaySelectedCtrl" ng-show="selectedFestivalContext.selectedEvent != null" class="col-lg-3 col-md-4 col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>{{selectedFestivalContext.selectedEvent.time}}</strong> <span ng-bind="selectedFestivalContext.selectedEvent.name"></span>
+                </div>
+                <div class="panel-body">
+                {{selectedFestivalContext.selectedDay.date}} <span class="minor">{{selectedFestivalContext.selectedDay.name}}</span>
+                <div ng-bind-html="selectedFestivalContext.selectedEvent.description"></div>
+                </div>
             </div>
         </div>
     </div>
